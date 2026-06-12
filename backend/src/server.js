@@ -5,6 +5,8 @@ import messageRoutes from "./routes/message.router.js";
 import path from "path";
 import mongoose from "mongoose";
 
+dotenv.config();
+
 mongoose.connect(process.env.MONGO_URL)
 .then(() => {
     console.log("MongoDB connected");
@@ -14,7 +16,6 @@ mongoose.connect(process.env.MONGO_URL)
 });
 
 
-dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 
