@@ -3,6 +3,15 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.router.js";
 import path from "path";
+import mongoose from "mongoose";
+
+mongoose.connect(process.env.MONGO_URL)
+.then(() => {
+    console.log("MongoDB connected");
+})
+.catch((err) => {
+    console.log(err);
+});
 
 
 dotenv.config();
@@ -12,7 +21,7 @@ const __dirname = path.resolve();
 const PORT = process.env.PORT || 3000
 
 app.use("/api/auth",authRoutes);  
-app.use("/api/auth",messageRoutes);  
+app.use("/api/messages",messageRoutes);  
 
 
 // make ready for deployement
