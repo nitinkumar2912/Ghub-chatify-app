@@ -1,13 +1,13 @@
 import express from "express";
-import dotenv from "dotenv";
+
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.router.js";
 import path from "path";
 import mongoose from "mongoose";
+import {ENV} from "./lib/env.js"
 
-dotenv.config();
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(ENV.MONGO_URI)
 .then(() => {
     console.log("MongoDB connected");
 })
@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 const __dirname = path.resolve();
 
-const PORT = process.env.PORT || 3000
+const PORT = ENV.PORT || 3000
 
 app.use("/api/auth",authRoutes);  
 app.use("/api/messages",messageRoutes);  
@@ -28,7 +28,7 @@ app.use("/api/messages",messageRoutes);
 
 // make ready for deployement
 
-if(process.env.NODE_ENV === "production") {
+if(ENV.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname , "../frontend/dist")))
 
     app.get("*" , (req,res) => {
