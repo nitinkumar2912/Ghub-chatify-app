@@ -1,5 +1,5 @@
 import mongoose  from "mongoose";
-import { minLength, required } from "zod/mini";
+
 
 
 const userSchema = new mongoose.Schema({
