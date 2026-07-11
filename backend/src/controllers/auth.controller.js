@@ -34,17 +34,23 @@ export const signup = async (req, res) => {
             password: hashedPassword,
         })
 
-    if(newUser) {
-        generateToken(newUser._id,res);
-        await newUser.save()
+        if (newUser) {
+            const savedUser = await newUser.save()
+            generateToken(newUser._id, res);
 
-        res.status(201).json({
-            _id:newUser._id,
-            fullName:newUser.fullName,
-            email: newUser.email,
-            profilePic: newUser.profilePic
-        })
-    }
+            res.status(201).json({
+                _id: newUser._id,
+                fullName: newUser.fullName,
+                email: newUser.email,
+                profilePic: newUser.profilePic
+            })
+
+            try {
+                await sendWelcomeEmail(savedUser.email, savedUser.fullName, ENV.CLIENT_URL);
+            } catch (error) {
+
+            }
+        }
 
         else {
             res.status(400), json({ message: "invalid user data" })
@@ -58,3 +64,33 @@ export const signup = async (req, res) => {
 
 
 }
+
+
+export const login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) { res.status(400).json({ message: "Invalid credentials" }) };
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) { res.status(400).json({ message: "Invalid credentials" }) }
+
+        generateToken(user._id, res);
+
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic,
+        });
+    } catch (error) {
+console.error ("Error in login controller" , error);
+res.status(500).json({message: "internal server error"})
+    }
+
+}
+
+export const logout = (_,res) => {
+        res.cookie("jwt","", {maxage: 0})
+        res.status(200).json({message: "Logged out succefully"})
+    }
