@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { process } from "zod/v4/core";
 
 export const ENV = {
     PORT: process.env.PORT,
@@ -9,4 +10,10 @@ export const ENV = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    
+
+
 };
