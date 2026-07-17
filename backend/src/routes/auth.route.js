@@ -2,8 +2,11 @@
 import express from "express";
 import { signup ,login,logout,updateProfile} from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
+import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 
 const router = express.Router();
+
+router.use(arcjetProtection); // agar next function call hoga then signup , login ,logut ,updateprofile chalenge
 
 router.post("/signup" ,signup)   
 router.post("/login" , login)   
