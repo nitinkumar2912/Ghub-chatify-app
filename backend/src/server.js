@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 
 
 import authRoutes from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.router.js";
+import messageRoutes from "./routes/message.route.js";
 import path from "path";
 import mongoose from "mongoose";
 import {ENV} from "./lib/env.js"
