@@ -28,7 +28,7 @@ export const getMessageByUserId = async (req,res) => {
                 ]
             }
         );
-        res.status(200).json(messagec)
+        res.status(200).json(message)
     } catch (error) {
         console.log("Error in getMessages controller :",error.message);
         res.status(500).json({message: "Internal Server error"});
@@ -58,6 +58,13 @@ export const sendMessage = async (req,res) => {
 
         res.status(201).json(newMessage);
     } catch (error) {
+        console.log("Error in sendMessages controller :",error.message);
+        res.status(500).json({message: "Internal Server error"});
+
         
     }
+}
+
+export const getChatPartners = async (req,res) => {
+    
 }
