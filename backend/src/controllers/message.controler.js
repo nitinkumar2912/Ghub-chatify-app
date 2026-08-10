@@ -66,5 +66,9 @@ export const sendMessage = async (req,res) => {
 }
 
 export const getChatPartners = async (req,res) => {
-    
+    try {
+        
+    } catch (error) {
+        
+    }
 }
