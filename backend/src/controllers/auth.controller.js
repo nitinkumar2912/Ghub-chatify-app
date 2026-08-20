@@ -119,8 +119,8 @@ try {
 
      res.status(200).json(updateUser);
 } catch (error) {
-    console.log("Error in updating profile" , error);
-    res.status(500).json({message: "Internal server error"});
+    console.log("Error in updating profile" , error); 
+    res.status(500).json({message: "Internal  server error"});
     
 }
 }
