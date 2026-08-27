@@ -1,44 +1,136 @@
-Highlights:
+# 💬 Real-Time Chat App
 
-🔐 Custom JWT Authentication (no 3rd-party auth)
-⚡ Real-time Messaging via Socket.io
-🟢 Online/Offline Presence Indicators
-🔔 Notification & Typing Sounds (with toggle)
-📨 Welcome Emails on Signup (Resend)
-🗂️ Image Uploads (Cloudinary)
-🧰 REST API with Node.js & Express
-🧱 MongoDB for Data Persistence
-🚦 API Rate-Limiting powered by Arcjet
-🎨 Beautiful UI with React, Tailwind CSS & DaisyUI
-🧠 Zustand for State Management
-🧑‍💻 Git & GitHub Workflow (branches, PRs, merges)
-🚀 Easy Deployment (free-tier friendly with Sevalla)
-🧪 .env Setup
-Backend (/backend)
-PORT=3000
-MONGO_URI=your_mongo_uri_here
+A full-stack real-time chat application built with **React, Node.js, Express, MongoDB and Socket.io**.
 
-NODE_ENV=development
+The project includes custom JWT authentication, real-time messaging, online/offline presence, image sharing, typing indicators, notifications, email integration and API security.
 
-JWT_SECRET=your_jwt_secret
+---
 
-RESEND_API_KEY=your_resend_api_key
-EMAIL_FROM=your_email_from_address
-EMAIL_FROM_NAME=your_email_from_name
+## ✨ Features
 
-CLIENT_URL=http://localhost:5173
+- 🔐 **Custom JWT Authentication**
+  - Signup & Login
+  - Protected routes
+  - Secure authentication with HTTP-only cookies
 
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+- ⚡ **Real-Time Messaging**
+  - Instant messaging using Socket.io
+  - Real-time message updates
 
-ARCJET_KEY=your_arcjet_key
-ARCJET_ENV=development
-🔧 Run the Backend
-cd backend
-npm install
-npm run dev
-💻 Run the Frontend
-cd frontend
-npm install
-npm run dev
+- 🟢 **Online / Offline Presence**
+  - See when users are online
+  - Real-time presence updates
+
+- ⌨️ **Typing Indicators**
+  - Real-time typing status
+  - Typing notification sounds
+
+- 🔔 **Notification Sounds**
+  - Message notification sounds
+  - Sound toggle option
+
+- 📨 **Welcome Emails**
+  - Welcome email sent after signup
+  - Powered by Resend
+
+- 🖼️ **Image Sharing**
+  - Upload images in chats
+  - Cloudinary integration
+
+- 🧰 **REST API**
+  - Built with Node.js & Express
+  - Clean controller and route structure
+
+- 🧱 **MongoDB**
+  - User persistence
+  - Message persistence
+  - Mongoose ODM
+
+- 🚦 **API Rate Limiting & Security**
+  - Powered by Arcjet
+
+- 🎨 **Modern UI**
+  - React
+  - Tailwind CSS
+  - DaisyUI
+  - Responsive chat interface
+
+- 🧠 **State Management**
+  - Zustand for global application state
+
+- 🧪 **Environment Variables**
+  - Separate configuration for development and production
+
+- 🚀 **Deployment Ready**
+  - Easy deployment
+  - Free-tier friendly architecture
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- React
+- Vite
+- React Router
+- Tailwind CSS
+- DaisyUI
+- Zustand
+- Axios
+- Socket.io Client
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- Socket.io
+- Cloudinary
+- Resend
+- Arcjet
+
+### Tools
+
+- Git
+- GitHub
+- Postman
+- VS Code
+
+---
+
+## 📁 Project Structure
+
+```text
+real-time-chat-app/
+│
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── lib/
+│   │   └── server.js
+│   │
+│   ├── .env
+│   ├── package.json
+│   └── ...
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── store/
+│   │   ├── lib/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   └── ...
+│
+├── .gitignore
+├── package.json
+└── README.md
