@@ -3,8 +3,14 @@ import { Route, Routes } from "react-router-dom";
 import ChatPage from "./pages/ChatPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
+
+  const {authUser , isLoading, login} = useAuthStore();
+
+  console.log("auth user", authUser)
+  console.log("isloading", isLoading)
   return (
     <div className="min-h-screen bg-[#05070b] relative flex items-center justify-center p-4 overflow-hidden">
 
@@ -42,9 +48,8 @@ function App() {
           rounded-full
         "
       />
-
       {/* Routes */}
-      <Routes>
+      <Routes> 
         <Route path="/" element={<ChatPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
@@ -53,5 +58,7 @@ function App() {
     </div>
   );
 }
+
+
 
 export default App;
