@@ -9,30 +9,33 @@ export const signup = async (req, res) => {
     const { fullName, email, password } = req.body;
 
     try {
-        if (!fullName || !email || !password) {
-            return res.status(404).json({ message: "All fields are required" });
+        const cleanName = typeof fullName === "string" ? fullName.trim() : "";
+        const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+        if (!cleanName || !cleanEmail || typeof password !== "string") {
+            return res.status(400).json({ message: "All fields are required" });
         }
+        if (cleanName.length > 60) return res.status(400).json({ message: "Names must be 60 characters or fewer" });
 
         if (password.length < 6) {
             return res.status(400).json({ message: "Password must be atleast 6 characters" });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: "Invalid email formate" });
+        if (!emailRegex.test(cleanEmail)) {
+            return res.status(400).json({ message: "Please enter a valid email address" });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: cleanEmail });
         if (user) {
-            return res.status(400).json({ meassage: "email already exist" });
+            return res.status(400).json({ message: "An account with this email already exists" });
         }
 
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            fullName,
-            email,
+            fullName: cleanName,
+            email: cleanEmail,
             password: hashedPassword,
         });
 
@@ -68,7 +71,11 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const cleanEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+        if (!cleanEmail || typeof password !== "string") {
+            return res.status(400).json({ message: "Email and password are required" });
+        }
+        const user = await User.findOne({ email: cleanEmail });
 
         if (!user) {
             return res.status(400).json({ message: "Invalid credentials" });
@@ -98,7 +105,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = (_, res) => {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV !== "development",
+    });
     return res.status(200).json({ message: "Logged out successfully" });
 };
 
@@ -115,7 +126,7 @@ try {
         userId,
         {profilePic: uploadResponse.secure_url},
         {new: true}
-     );
+     ).select("-password");
 
      res.status(200).json(updateUser);
 } catch (error) {
