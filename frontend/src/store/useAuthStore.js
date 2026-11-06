@@ -10,82 +10,52 @@ export const useAuthStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      const res = await axiosInstance.get("/auth/check");
-
-      set({
-        authUser: res.data,
-      });
-    } catch (error) {
-      console.log("Error in authCheck", error);
-
-      set({
-        authUser: null,
-      });
+      const response = await axiosInstance.get("/auth/check");
+      set({ authUser: response.data });
+    } catch {
+      set({ authUser: null });
     } finally {
-      set({
-        isCheckingAuth: false,
-      });
+      set({ isCheckingAuth: false });
     }
   },
 
   signup: async (data) => {
-    set({
-      isSigningUp: true,
-    });
-
+    set({ isSigningUp: true });
     try {
-      const res = await axiosInstance.post(
-        "/auth/signup",
-        data
-      );
-
-      set({
-        authUser: res.data,
-      });
-
-      toast.success("Account created successfully!");
-
+      const response = await axiosInstance.post("/auth/signup", data);
+      set({ authUser: response.data });
+      toast.success("Your account is ready");
+      return true;
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-        "Something went wrong during signup"
+          (error.code === "ERR_NETWORK"
+            ? "The chat server can’t be reached. Start the backend and try again."
+            : "Could not create your account")
       );
-
+      return false;
     } finally {
-      set({
-        isSigningUp: false,
-      });
+      set({ isSigningUp: false });
     }
   },
 
-
-   login: async (data) => {
-    set({
-      isLoggingIn: true,
-    });
-
+  login: async (data) => {
+    set({ isLoggingIn: true });
     try {
-      const res = await axiosInstance.post(
-        "/auth/login",
-        data
-      );
-
-      set({
-        authUser: res.data,
-      });
-
-      toast.success("Logged in successfully");
-
+      const response = await axiosInstance.post("/auth/login", data);
+      set({ authUser: response.data });
+      toast.success("Welcome back");
+      return true;
     } catch (error) {
       toast.error(
-        error.response?.data?.message
-
+        error.response?.data?.message ||
+          (error.code === "ERR_NETWORK"
+            ? "The chat server can’t be reached. Start the backend and try again."
+            : "Could not sign in")
       );
-
+      return false;
     } finally {
-      set({
-        isLoggingIn: false,
-      });
+      set({ isLoggingIn: false });
     }
   },
 
@@ -93,13 +63,9 @@ export const useAuthStore = create((set) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      toast.success("Logged out successfully");
-      get().disconnectSocket();
+      toast.success("You’re signed out");
     } catch (error) {
-      toast.error("Error logging out");
-      console.log("Logout error:", error);
+      toast.error(error.response?.data?.message || "Could not sign out");
     }
   },
-
-
 }));

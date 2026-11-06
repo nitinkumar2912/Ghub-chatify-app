@@ -1,252 +1,85 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
-import {
-  MessageCircleIcon,
-  LockIcon,
-  MailIcon,
-  UserIcon,
-  LoaderIcon,
-} from "lucide-react";
 import { Link } from "react-router-dom";
+import { LockKeyhole, Mail, MessageCircle, Sparkles, UserRound } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 function SignUpPage() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ fullName: "", email: "", password: "", confirmPassword: "" });
   const { signup, isSigningUp } = useAuthStore();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Check full name
-    if (!formData.fullName.trim()) {
-      toast.error("Please enter your full name");
-      return;
-    }
-
-    // Check email
-    if (!formData.email.trim()) {
-      toast.error("Please enter your email");
-      return;
-    }
-
-    // Check password
-    if (!formData.password.trim()) {
-      toast.error("Please enter your password");
-      return;
-    }
-
-    // Check password length
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
-
-    // Send data to backend
-    await signup(formData);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const fullName = formData.fullName.trim();
+    if (!fullName) return toast.error("Please enter your name");
+    if (formData.password.length < 6) return toast.error("Use at least 6 characters for your password");
+    if (formData.password !== formData.confirmPassword) return toast.error("Those passwords don’t match yet");
+    await signup({ fullName, email: formData.email.trim(), password: formData.password });
   };
 
   return (
-    <div className="w-full flex items-center justify-center p-4 bg-transparent">
-      <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
-
-        <BorderAnimatedContainer>
-          <div className="w-full flex flex-col md:flex-row bg-[#080b14]/90">
-
-            {/* LEFT SIDE - FORM */}
-            <div className="md:w-1/2 p-8 flex items-center justify-center md:border-r border-slate-600/30">
-
-              <div className="w-full max-w-md">
-
-                {/* HEADING */}
-                <div className="text-center mb-8">
-
-                  <MessageCircleIcon
-                    className="w-12 h-12 mx-auto text-slate-400 mb-4"
-                  />
-
-                  <h2 className="text-2xl font-bold text-slate-200 mb-2">
-                    Create Account
-                  </h2>
-
-                  <p className="text-slate-400">
-                    Sign up for a new account
-                  </p>
-
-                </div>
-
-                {/* FORM */}
-                <form
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                >
-
-                  {/* FULL NAME */}
-                  <div>
-
-                    <label className="auth-input-label">
-                      Full Name
-                    </label>
-
-                    <div className="relative">
-
-                      <UserIcon className="auth-input-icon" />
-
-                      <input
-                        type="text"
-                        value={formData.fullName}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            fullName: e.target.value,
-                          })
-                        }
-                        className="input"
-                        placeholder="John Doe"
-                      />
-
-                    </div>
-
-                  </div>
-
-                  {/* EMAIL */}
-                  <div>
-
-                    <label className="auth-input-label">
-                      Email
-                    </label>
-
-                    <div className="relative">
-
-                      <MailIcon className="auth-input-icon" />
-
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            email: e.target.value,
-                          })
-                        }
-                        className="input"
-                        placeholder="johndoe@gmail.com"
-                      />
-
-                    </div>
-
-                  </div>
-
-                  {/* PASSWORD */}
-                  <div>
-
-                    <label className="auth-input-label">
-                      Password
-                    </label>
-
-                    <div className="relative">
-
-                      <LockIcon className="auth-input-icon" />
-
-                      <input
-                        type="password"
-                        value={formData.password}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            password: e.target.value,
-                          })
-                        }
-                        className="input"
-                        placeholder="Enter your password"
-                      />
-
-                    </div>
-
-                  </div>
-
-                  {/* SUBMIT BUTTON */}
-                  <button
-                    className="auth-btn"
-                    type="submit"
-                    disabled={isSigningUp}
-                  >
-
-                    {isSigningUp ? (
-                      <LoaderIcon className="w-5 h-5 animate-spin mx-auto" />
-                    ) : (
-                      "Create Account"
-                    )}
-
-                  </button>
-
-                </form>
-
-                {/* LOGIN LINK */}
-                <div className="mt-6 text-center">
-
-                  <Link
-                    to="/login"
-                    className="auth-link"
-                  >
-                    Already have an account? Login
-                  </Link>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* RIGHT SIDE - ILLUSTRATION */}
-            <div className="hidden md:w-1/2 md:flex items-center justify-center p-6 bg-[#080b14]/60">
-
-              <div>
-
-                <img
-                  src="/signup.png"
-                  alt="People using mobile devices"
-                  className="w-full h-auto object-contain"
-                />
-
-                <div className="mt-6 text-center">
-
-                  <h3 className="text-xl font-medium text-cyan-400">
-                    Start Your Journey Today
-                  </h3>
-
-                  <div className="mt-4 flex justify-center gap-4">
-
-                    <span className="auth-badge">
-                      Free
-                    </span>
-
-                    <span className="auth-badge">
-                      Easy Setup
-                    </span>
-
-                    <span className="auth-badge">
-                      Private
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
+    <main className="auth-card">
+      <section className="auth-form-panel">
+        <div className="auth-form-inner">
+          <div className="auth-heading">
+            <div className="auth-logo"><MessageCircle size={21} /></div>
+            <h1>Make it personal.</h1>
+            <p>Create your space and start talking.</p>
           </div>
-        </BorderAnimatedContainer>
 
-      </div>
-    </div>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="auth-field">
+              <label className="auth-input-label" htmlFor="signup-name">Your name</label>
+              <div className="relative">
+                <UserRound className="auth-input-icon" />
+                <input id="signup-name" className="input" type="text" autoComplete="name" required maxLength={60} value={formData.fullName} onChange={(event) => setFormData({ ...formData, fullName: event.target.value })} placeholder="How should we call you?" />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-input-label" htmlFor="signup-email">Email address</label>
+              <div className="relative">
+                <Mail className="auth-input-icon" />
+                <input id="signup-email" className="input" type="email" autoComplete="email" required value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} placeholder="you@example.com" />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-input-label" htmlFor="signup-password">Password</label>
+              <div className="relative">
+                <LockKeyhole className="auth-input-icon" />
+                <input id="signup-password" className="input" type="password" autoComplete="new-password" minLength={6} required value={formData.password} onChange={(event) => setFormData({ ...formData, password: event.target.value })} placeholder="At least 6 characters" />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-input-label" htmlFor="signup-confirm">Confirm password</label>
+              <div className="relative">
+                <LockKeyhole className="auth-input-icon" />
+                <input id="signup-confirm" className="input" type="password" autoComplete="new-password" required value={formData.confirmPassword} onChange={(event) => setFormData({ ...formData, confirmPassword: event.target.value })} placeholder="One more time" />
+              </div>
+            </div>
+
+            <button className="auth-btn" type="submit" disabled={isSigningUp}>
+              {isSigningUp ? <span className="spinner" style={{ display: "inline-block", verticalAlign: "middle" }} /> : "Create your account"}
+            </button>
+          </form>
+
+          <p className="auth-switch">Already have a space? <Link to="/login">Sign in</Link></p>
+          <div className="auth-footnote"><LockKeyhole size={13} /> Your conversations are yours alone.</div>
+        </div>
+      </section>
+
+      <aside className="auth-aside">
+        <img className="auth-art" src="/signup.png" alt="Colorful chat devices and friendly robots" />
+        <div className="auth-aside-copy">
+          <div className="auth-aside-kicker"><Sparkles size={14} /> YOUR PEOPLE, ONE MESSAGE AWAY</div>
+          <h2>Small messages. Big I’m-thinking-of-you energy.</h2>
+          <p>Bring your favorite conversations into one warm little corner.</p>
+          <div className="auth-badges"><span className="auth-badge">Instant</span><span className="auth-badge">Personal</span><span className="auth-badge">Always yours</span></div>
+        </div>
+      </aside>
+    </main>
   );
 }
 

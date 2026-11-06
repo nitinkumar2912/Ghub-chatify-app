@@ -1,16 +1,23 @@
-# React + Vite
+# Mingle frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React and Vite client for the Mingle chat app. The app uses Zustand for session and conversation state, Axios for the REST API, and Socket.IO for live messages and presence.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+From the project root:
 
-## React Compiler
+```bash
+npm install --prefix frontend
+npm run dev --prefix frontend
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The backend should be running at `http://localhost:3000` with `CLIENT_URL=http://localhost:5173`. See the root [README](../README.md) for backend setup and environment variables.
 
-## Expanding the ESLint configuration
+## Build and lint
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run build --prefix frontend
+npm run lint --prefix frontend
+```
+
+To point the client at a different API base URL, set `VITE_API_URL` to the API root, including `/api` (for example, `https://chat.example.com/api`). Socket.IO connects to the same host.
