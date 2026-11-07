@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Check,
@@ -14,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import ThemeToggle from "../components/ThemeToggle";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 
@@ -79,7 +81,8 @@ function compressImage(file) {
   });
 }
 
-function ChatPage() {
+function ChatPage({ theme, onToggleTheme }) {
+  const navigate = useNavigate();
   const { authUser, logout } = useAuthStore();
   const {
     contacts,
@@ -211,12 +214,18 @@ function ChatPage() {
     selectUser(null);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <main className={`chat-workspace ${selectedUser ? "has-selection" : ""}`}>
       <aside className="inbox-panel">
         <div className="inbox-brand-row">
           <div className="brand-mark"><MessageCircle size={19} strokeWidth={2.4} /></div>
           <span className="brand-name">mingle<span>.</span></span>
+          <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
           <div className={`connection-pill ${connectionStatus}`} title={`Realtime ${connectionStatus}`}>
             <span />
             <span>{connectionStatus === "connected" ? "Live" : connectionStatus === "connecting" ? "Connecting" : "Offline"}</span>
@@ -296,7 +305,7 @@ function ChatPage() {
             <strong>{authUser?.fullName}</strong>
             <span>{authUser?.email}</span>
           </div>
-          <button type="button" className="icon-button logout-button" onClick={logout} title="Sign out" aria-label="Sign out">
+          <button type="button" className="icon-button logout-button" onClick={handleLogout} title="Sign out" aria-label="Sign out">
             <LogOut size={17} />
           </button>
         </div>

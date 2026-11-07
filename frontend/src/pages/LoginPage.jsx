@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LockKeyhole, Mail, MessageCircle, Sparkles } from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
 import { useAuthStore } from "../store/useAuthStore";
 
-function LoginPage() {
+function LoginPage({ theme, onToggleTheme }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login, isLoggingIn } = useAuthStore();
 
@@ -13,7 +14,15 @@ function LoginPage() {
   };
 
   return (
-    <main className="auth-card">
+    <div className="auth-page">
+      <div className="auth-topbar">
+        <Link className="auth-home-link" to="/">
+          <span className="auth-home-mark"><MessageCircle size={17} /></span>
+          <span>mingle<span>.</span></span>
+        </Link>
+        <ThemeToggle theme={theme} onToggleTheme={onToggleTheme} />
+      </div>
+      <main className="auth-card">
       <section className="auth-form-panel">
         <div className="auth-form-inner">
           <div className="auth-heading">
@@ -58,7 +67,8 @@ function LoginPage() {
           <div className="auth-badges"><span className="auth-badge">Instant</span><span className="auth-badge">Personal</span><span className="auth-badge">Always yours</span></div>
         </div>
       </aside>
-    </main>
+      </main>
+    </div>
   );
 }
 
