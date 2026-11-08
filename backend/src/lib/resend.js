@@ -1,8 +1,8 @@
-import {Resend} from "resend";
-import {ENV} from "./env.js";
-export const resendCLient = new Resend(ENV.RESEND_API_KEY); 
+import { Resend } from "resend";
+import { ENV } from "./env.js";
+export const resendCLient = ENV.RESEND_API_KEY ? new Resend(ENV.RESEND_API_KEY) : null;
 
 export const sender = {
-    email: process.env.EMAIL_FROM,
-    name: process.env.EMAIL_FROM_NAME,
-}; 
+  email: ENV.EMAIL_FROM,
+  name: ENV.EMAIL_FROM_NAME,
+};

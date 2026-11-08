@@ -1,20 +1,32 @@
-import { resendCLient,sender  } from "../lib/resend.js";
-import { createWelcomeEmailTemplate } from "./emailTemplates.js";
+import { resendCLient } from "../lib/resend.js";
+import { ENV } from "../lib/env.js";
+import {
+  createPasswordResetEmailTemplate,
+  createVerificationEmailTemplate,
+  createWelcomeEmailTemplate,
+} from "./emailTemplates.js";
 
-export const sendWelcomeEmail = async (email,name,clientUrl) => {
-const {data,error} = await resendCLient.emails.send({
-
-    from: `${sender.name} <${sender.email}>`,
-    to: email,
-    subject: "Welcome to Chatify!",
-    html: createWelcomeEmailTemplate(name,clientUrl), 
-});
-
-if(error ) {
-    console.error("error sending welcome email" , error);
-    throw new Error ("failed to send welcome email");
-
+async function sendEmail(to, subject, html) {
+  if (!ENV.RESEND_API_KEY || !ENV.EMAIL_FROM) throw new Error("Email service is not configured");
+  const { data, error } = await resendCLient.emails.send({
+    from: `${ENV.EMAIL_FROM_NAME} <${ENV.EMAIL_FROM}>`,
+    to,
+    subject,
+    html,
+  });
+  if (error) throw new Error(error.message || "Email provider rejected the request");
+  return data;
 }
 
-console.log("Welcome Email sent successfully", data);
-};
+export const sendWelcomeEmail = (email, name, clientURL) =>
+  sendEmail(email, "Welcome to mingle", createWelcomeEmailTemplate(name, clientURL));
+
+export const sendVerificationEmail = (email, name, verificationURL) =>
+  sendEmail(
+    email,
+    "Confirm your mingle email",
+    createVerificationEmailTemplate(name, verificationURL),
+  );
+
+export const sendPasswordResetEmail = (email, name, resetURL) =>
+  sendEmail(email, "Reset your mingle password", createPasswordResetEmailTemplate(name, resetURL));
